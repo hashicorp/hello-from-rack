@@ -1,0 +1,43 @@
+{
+  "builders": [
+    {
+      "type": "docker",
+      "image": "ruby:2.2-slim",
+      "commit": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": ".",
+      "destination": "/tmp/rackapp"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "cd /tmp/rackapp",
+        "bundle --deployment",
+        "tar czvf /tmp/rackapp.tar.gz ."
+      ]
+    },
+    {
+      "type": "file",
+      "source": "/tmp/rackapp.tar.gz",
+      "destination": "rackapp.tar.gz",
+      "direction": "download"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "artifice",
+        "files": ["rackapp.tar.gz"]
+      },
+      {
+        "type": "atlas",
+        "artifact": "hashicorp/hello-from-rack",
+        "artifact_type": "archive"
+      }
+    ]
+  ]
+}
