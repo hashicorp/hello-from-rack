@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 hello = "Hello from Rack!"
 
 use Rack::ShowExceptions
